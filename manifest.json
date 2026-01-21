@@ -1,0 +1,8 @@
+{
+    "domain": "gtfs_skane",
+    "name": "GTFS Skåne",
+    "iot_class": "cloud_polling",
+    "loggers": ["pygtfs", "custom_components.gtfs_skane"],
+    "requirements": ["pygtfs==0.1.9"],
+    "version": "0.1.0"
+}
