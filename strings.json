@@ -1,0 +1,42 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure GTFS Skåne",
+        "description": "Set up the GTFS Skåne integration to get public transit departure information.",
+        "data": {
+          "api_key": "Trafiklab API Key",
+          "operating_area": "Operating Area",
+          "data_url": "Data URL Template"
+        },
+        "data_description": {
+          "api_key": "Your API key from Trafiklab (required)",
+          "operating_area": "The operating area (e.g., 'skane', 'stockholm'). Defaults to 'skane'.",
+          "data_url": "URL template for GTFS data. Use {operating_area} as placeholder. Leave default unless you know what you're doing."
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure GTFS Skåne",
+        "description": "Update the configuration for GTFS Skåne integration.",
+        "data": {
+          "api_key": "Trafiklab API Key",
+          "operating_area": "Operating Area",
+          "data_url": "Data URL Template"
+        },
+        "data_description": {
+          "api_key": "Your API key from Trafiklab (required)",
+          "operating_area": "The operating area (e.g., 'skane', 'stockholm'). Defaults to 'skane'.",
+          "data_url": "URL template for GTFS data. Use {operating_area} as placeholder. Leave default unless you know what you're doing."
+        }
+      }
+    },
+    "error": {
+      "api_key_required": "API key is required",
+      "cannot_connect": "Failed to connect to the data source",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "This integration is already configured"
+    }
+  }
+}

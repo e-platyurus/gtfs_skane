@@ -1,0 +1,42 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konfigurera GTFS Skåne",
+        "description": "Konfigurera GTFS Skåne-integrationen för att få avgångsinformation för kollektivtrafik.",
+        "data": {
+          "api_key": "Trafiklab API-nyckel",
+          "operating_area": "Trafikområde",
+          "data_url": "Data URL-mall"
+        },
+        "data_description": {
+          "api_key": "Din API-nyckel från Trafiklab (krävs)",
+          "operating_area": "Trafikområdet (t.ex. 'skane', 'stockholm'). Standard är 'skane'.",
+          "data_url": "URL-mall för GTFS-data. Använd {operating_area} som platshållare. Lämna standardvärdet om du inte vet vad du gör."
+        }
+      },
+      "reconfigure": {
+        "title": "Omkonfigurera GTFS Skåne",
+        "description": "Uppdatera konfigurationen för GTFS Skåne-integrationen.",
+        "data": {
+          "api_key": "Trafiklab API-nyckel",
+          "operating_area": "Trafikområde",
+          "data_url": "Data URL-mall"
+        },
+        "data_description": {
+          "api_key": "Din API-nyckel från Trafiklab (krävs)",
+          "operating_area": "Trafikområdet (t.ex. 'skane', 'stockholm'). Standard är 'skane'.",
+          "data_url": "URL-mall för GTFS-data. Använd {operating_area} som platshållare. Lämna standardvärdet om du inte vet vad du gör."
+        }
+      }
+    },
+    "error": {
+      "api_key_required": "API-nyckel krävs",
+      "cannot_connect": "Kunde inte ansluta till datakällan",
+      "unknown": "Ett oväntat fel inträffade"
+    },
+    "abort": {
+      "already_configured": "Denna integration är redan konfigurerad"
+    }
+  }
+}

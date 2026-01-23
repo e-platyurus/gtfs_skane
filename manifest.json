@@ -1,8 +1,12 @@
 {
     "domain": "gtfs_skane",
     "name": "GTFS Skåne",
+    "codeowners": [],
+    "config_flow": true,
+    "documentation": "https://github.com/yourusername/gtfs_skane",
     "iot_class": "cloud_polling",
+    "issue_tracker": "https://github.com/yourusername/gtfs_skane/issues",
     "loggers": ["pygtfs", "custom_components.gtfs_skane"],
-    "requirements": ["pygtfs==0.1.9"],
+    "requirements": ["pygtfs==0.1.9", "aiohttp"],
     "version": "0.1.0"
 }
