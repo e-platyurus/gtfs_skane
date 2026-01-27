@@ -20,10 +20,11 @@ from .const import (
     DEFAULT_DATA_URL_TEMPLATE,
     DOMAIN,
 )
+from .gtfs_data import GTFSDataManager
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[Platform] = []
+PLATFORMS: list[Platform] = [Platform.UPDATE]
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
@@ -61,63 +62,37 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.error(f"Failed to create data directory: {err}")
         raise ConfigEntryNotReady from err
 
-    # Check if GTFS zip file exists
-    zip_filename = f"{operating_area}.zip"
-    zip_path = data_dir / zip_filename
-
-    if not zip_path.exists():
-        _LOGGER.info(f"GTFS data file not found at {zip_path}, downloading...")
-        try:
-            await download_gtfs_data(hass, data_url, zip_path)
-            _LOGGER.info(f"Successfully downloaded GTFS data to {zip_path}")
-        except Exception as err:
-            _LOGGER.error(f"Failed to download GTFS data: {err}")
-            raise ConfigEntryNotReady from err
+    # Initialize data manager
+    data_manager = GTFSDataManager(
+        hass=hass,
+        data_dir=data_dir,
+        data_url=data_url,
+        operating_area=operating_area,
+    )
+    
+    # Check if database exists (initial setup)
+    if not data_manager.database_exists():
+        _LOGGER.warning(
+            "GTFS database not found. Please trigger an update via the Update entity "
+            "to download and convert GTFS data."
+        )
+        # Don't raise ConfigEntryNotReady - let the integration load
+        # User will see update entity showing update available
     else:
-        _LOGGER.info(f"GTFS data file already exists at {zip_path}")
+        _LOGGER.info("GTFS database found, integration ready")
 
     # Store data in hass.data
     hass.data[DOMAIN][entry.entry_id] = {
         "operating_area": operating_area,
         "data_url": data_url,
         "data_dir": data_dir,
-        "zip_path": zip_path,
+        "data_manager": data_manager,
     }
 
-    # Set up platforms (none for now, but ready for future sensor platform)
+    # Set up platforms
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
-
-
-async def download_gtfs_data(
-    hass: HomeAssistant, url: str, destination: Path
-) -> None:
-    """Download GTFS data from the specified URL."""
-    _LOGGER.debug(f"Starting download from {url}")
-    
-    # Use Home Assistant's shared session for better connection pooling
-    session = async_get_clientsession(hass)
-    
-    try:
-        async with session.get(url, timeout=aiohttp.ClientTimeout(total=600)) as response:
-            if response.status != 200:
-                raise Exception(
-                    f"Failed to download GTFS data: HTTP {response.status}"
-                )
-
-            # Download in chunks to handle large files
-            with open(destination, "wb") as f:
-                async for chunk in response.content.iter_chunked(8192):
-                    f.write(chunk)
-
-            _LOGGER.debug(f"Download completed: {destination}")
-            
-    except Exception as err:
-        # Clean up partial download
-        if destination.exists():
-            destination.unlink()
-        raise
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
